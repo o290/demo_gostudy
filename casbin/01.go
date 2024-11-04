@@ -13,15 +13,15 @@ func main() {
 	//这个路径来源于casbin github：https://github.com/casbin/casbin/tree/master/examples
 	//https://casbin.org/zh/docs/adapters/
 	////NewAdapter用于创建适配器
-	//a := fileadapter.NewAdapter("conf/basic_policy.csv")
+	//a := fileadapter.NewAdapter("conf/01.csv")
 	////NewEnforcer用于创建casbin
-	//e, err := casbin.NewEnforcer("conf/basic_model.conf", a)
+	//e, err := casbin.NewEnforcer("conf/01.conf", a)
 	//if err != nil {
 	//	log.Fatalf("error:enforcer:%s", err)
 	//}
 
 	//第二种定义方式
-	e, err := casbin.NewEnforcer("conf/basic_model.conf", "conf/basic_policy.csv")
+	e, err := casbin.NewEnforcer("conf/01.conf", "conf/01.csv")
 	if err != nil {
 		log.Fatalf("error:enforcer:%s", err)
 	}
