@@ -1,0 +1,9 @@
+settings:
+    application:
+        name: write
+        host: 0.0.0.0
+        ishttps: false
+        mode: release
+        port: "8080"
+        readtimeout: 1
+        writertimeout: 2
