@@ -1,0 +1,10 @@
+settings:
+    application:
+        count: 2
+        host: 0.0.0.0
+        mode: release
+        name: change
+        port: "8080"
+        readtimeout: 1
+        aa: 1
+        class: 33

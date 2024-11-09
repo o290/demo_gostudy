@@ -1,0 +1,11 @@
+settings:
+  application:
+    name.first: name
+    parent:
+      son1:
+        name: bob
+      son2:
+        name: alice
+    host: 0.0.0.0
+    mode: release
+    port: "8080"
