@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>点选式验证码登录</title>
+    <style>
+        .captcha-image { width: 150px; height: 150px; margin: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<h2>点选式验证码</h2>
+<p id="captcha-question"></p>
+<div id="captcha-images">
+    <!-- 图像列表 -->
+</div>
+
+<button id="submit-btn" disabled>提交</button>
+
+<script>
+    let selectedImages = [];
+
+    // 获取验证码
+    function getCaptcha() {
+        fetch("/generate-captcha")
+            .then(response => response.json())
+            .then(data => {
+                // 显示问题
+                document.getElementById('captcha-question').textContent = data.question;
+
+                // 显示图片
+                const imagesContainer = document.getElementById('captcha-images');
+                imagesContainer.innerHTML = ""; // 清空现有图片
+                data.images.forEach((img, index) => {
+                    const imgElement = document.createElement("img");
+                    imgElement.src = img;
+                    imgElement.className = "captcha-image";
+                    imgElement.alt = "Captcha Image " + (index + 1);
+                    imgElement.onclick = () => toggleImageSelection(img);
+                    imagesContainer.appendChild(imgElement);
+                });
+            })
+            .catch(err => console.error('Error fetching captcha:', err));
+    }
+
+    // 切换选择的图片
+    function toggleImageSelection(img) {
+        const index = selectedImages.indexOf(img);
+        if (index === -1) {
+            selectedImages.push(img); // 添加到选择数组
+        } else {
+            selectedImages.splice(index, 1); // 从选择数组中移除
+        }
+
+        // 启用提交按钮
+        document.getElementById('submit-btn').disabled = selectedImages.length === 0;
+    }
+
+    // 提交验证码验证结果
+    document.getElementById('submit-btn').addEventListener('click', () => {
+        fetch('/verify-captcha', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ clicked_images: selectedImages })
+        })
+            .then(response => response.text())
+            .then(message => {
+                alert(message);
+                if (message === "Login success") {
+                    // 执行登录操作
+                    window.location.href = "/dashboard"; // 假设登录成功后跳转到一个页面
+                }
+            })
+            .catch(err => console.error('Error verifying captcha:', err));
+    });
+
+    // 初始化验证码
+    getCaptcha();
+</script>
+</body>
+</html>
